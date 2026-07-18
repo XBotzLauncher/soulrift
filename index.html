@@ -34,12 +34,9 @@
 
     <style>
         :root {
-            --bg: #030308;
             --purple: #b44dff;
             --purple-soft: rgba(180, 77, 255, 0.3);
-            --purple-glow: rgba(180, 77, 255, 0.5);
             --text: #f0e6ff;
-            --text-secondary: #b0b0c8;
             --accent: #c084fc;
         }
 
@@ -51,7 +48,6 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg);
             color: var(--text);
             display: flex;
             justify-content: center;
@@ -61,13 +57,37 @@
             padding: 20px;
             position: relative;
             overflow-x: hidden;
-            /* Hanya satu aksen ambient sangat tipis, tidak bergerak */
-            background-image: radial-gradient(ellipse at 50% 40%, rgba(139, 92, 246, 0.04) 0%, transparent 60%);
-            background-attachment: fixed;
+            background: #030308; /* fallback */
         }
 
-        /* Partikel bintang sangat minimal dan tidak animasi */
-        body::before {
+        /* === BACKGROUND FULL SCREEN DENGAN BLUR === */
+        .bg-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: url('background.png') center/cover no-repeat;
+            filter: blur(8px) brightness(0.25);
+            transform: scale(1.1); /* menghindari tepi blur */
+            pointer-events: none;
+        }
+
+        /* Overlay gelap tipis untuk kontras */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: rgba(3, 3, 8, 0.45);
+            pointer-events: none;
+        }
+
+        /* Partikel statis sangat ringan */
+        body::after {
             content: '';
             position: fixed;
             top: 0;
@@ -75,25 +95,25 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 0;
+            z-index: -1;
             background-image:
-                radial-gradient(1px 1px at 15% 30%, rgba(200, 160, 255, 0.25), transparent),
-                radial-gradient(1px 1px at 70% 55%, rgba(190, 140, 255, 0.2), transparent),
-                radial-gradient(1px 1px at 35% 75%, rgba(210, 165, 255, 0.2), transparent),
-                radial-gradient(1px 1px at 85% 20%, rgba(185, 140, 255, 0.2), transparent);
-            opacity: 0.8;
+                radial-gradient(1px 1px at 15% 30%, rgba(200, 160, 255, 0.2), transparent),
+                radial-gradient(1px 1px at 70% 55%, rgba(190, 140, 255, 0.18), transparent),
+                radial-gradient(1px 1px at 35% 75%, rgba(210, 165, 255, 0.15), transparent),
+                radial-gradient(1px 1px at 85% 20%, rgba(185, 140, 255, 0.18), transparent);
+            opacity: 0.7;
         }
 
         .main-content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             max-width: 680px;
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 16px;
-            padding: 10px 10px;
+            padding: 10px;
         }
 
         /* === BANNER === */
@@ -198,7 +218,7 @@
             font-size: 2rem;
             margin: 0 6px;
             vertical-align: middle;
-            color: #c084fc;
+            color: var(--accent);
             filter: drop-shadow(0 0 8px rgba(180, 77, 255, 0.5));
             transition: transform 0.3s ease;
         }
@@ -212,7 +232,6 @@
             box-shadow: 0 0 10px var(--purple-soft);
         }
 
-        /* Deskripsi */
         p.desc {
             font-size: 1.1rem;
             line-height: 1.7;
@@ -245,8 +264,6 @@
             border: 1px solid rgba(200, 160, 255, 0.5);
             box-shadow: 0 0 18px rgba(180, 77, 255, 0.3), 0 6px 18px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
         .discord-btn i {
@@ -268,10 +285,8 @@
 
         .discord-btn:active {
             transform: translateY(0);
-            transition: transform 0.1s;
         }
 
-        /* Fallback */
         .fallback-text {
             font-size: 0.8rem;
             color: #7a7a9a;
@@ -292,7 +307,6 @@
             text-decoration-color: rgba(180, 130, 255, 0.4);
         }
 
-        /* Responsive */
         @media (max-width: 600px) {
             h1 {
                 font-size: 2rem;
@@ -313,6 +327,10 @@
 </head>
 
 <body>
+    <!-- BACKGROUND GAMBAR FULL DENGAN BLUR -->
+    <div class="bg-blur" aria-hidden="true"></div>
+    <div class="bg-overlay" aria-hidden="true"></div>
+
     <div class="main-content">
         <!-- Banner Server -->
         <div class="banner-wrapper">
@@ -347,7 +365,7 @@
 
         <p class="fallback-text">
             Link tidak terbuka otomatis?<br />
-            <a href="https://discord.gg/YzXw3HNXw">Klik di sini untuk bergabung ke Discord</a>.
+            <a href="https://discord.gg/YzXw3HNXw" rel="noopener noreferrer">Klik di sini untuk bergabung ke Discord</a>.
         </p>
     </div>
 
